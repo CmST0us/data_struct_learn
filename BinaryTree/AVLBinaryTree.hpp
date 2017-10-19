@@ -7,9 +7,9 @@ struct AVLBinaryTreeNode {
     T data;
     int repeat = 1;
     
-    AVLBinaryTreeNode<T> *lchild;
-    AVLBinaryTreeNode<T> *rchild;
-    AVLBinaryTreeNode<T> *parents;
+    AVLBinaryTreeNode<T> *lchild = nullptr;
+    AVLBinaryTreeNode<T> *rchild = nullptr;
+    AVLBinaryTreeNode<T> *parents = nullptr;
 
     AVLBinaryTreeNode(T data) {
         this->data = data;
@@ -69,7 +69,7 @@ struct AVLBinaryTreeNode {
 
     
 private:
-    int _getHeight(AVLBinaryTreeNode<T> *treeNode = nullptr) {
+    int _getHeight(AVLBinaryTreeNode<T> *treeNode) {
         int lresult = 0, rresult = 0;
         if (treeNode == nullptr) {
             return 0;
@@ -79,7 +79,7 @@ private:
         return (lresult >= rresult ? lresult : rresult) + 1;
     }
     
-    int _getBalanceFactor (AVLBinaryTreeNode<T> *treeNode = nullptr) {
+    int _getBalanceFactor (AVLBinaryTreeNode<T> *treeNode) {
         int left = 0;
         int right = 0;
         
@@ -116,12 +116,15 @@ private:
             }
         }
     }
-
+    
+    AVLBinaryTreeNode<T> *_getTroubleNode(AVLBinaryTreeNode<T> *node) {
+        
+    }
 };
 
 template <class T>
 struct AVLBinaryTree {
-    AVLBinaryTreeNode<T> *root;
+    AVLBinaryTreeNode<T> *root = nullptr;
     
     int getHeight() {
         return this->root->getHeight();
@@ -144,7 +147,7 @@ struct AVLBinaryTree {
     }
     
 private:
-    void _insertData(T data, AVLBinaryTreeNode<T> *treeNode = nullptr) {
+    void _insertData(T data, AVLBinaryTreeNode<T> *treeNode) {
         if (this->root == nullptr) {
             auto newNode = new AVLBinaryTreeNode<T>(data);
             this->root = newNode;
