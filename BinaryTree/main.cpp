@@ -64,7 +64,9 @@ void test_BinaryTree() {
 
 void test_AVLBinaryTree() {
     AVLBinaryTree<int> tree;
-    tree<<15<<6<<10<<21<<8<<9<<7<<14<<6<<17<<18;
+    tree<<15<<6<<11<<7<<8<<9<<10<<17<<18;
+    
+    
 }
 int main(int argc, char *argv[]) {
 //    test_BinaryTree();

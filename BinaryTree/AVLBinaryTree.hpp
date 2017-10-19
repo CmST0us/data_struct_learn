@@ -38,35 +38,9 @@ struct AVLBinaryTreeNode {
         return this->_getBalanceFactor(this);
     }
     
-    void makeBalance() {
-        this->_makeBalance(this);
+    AVLBinaryTreeNode<T> *getUnbalanceNode() {
+        return this->_getUnbalanceNode(this);
     }
-    
-    void rotationL(AVLBinaryTreeNode<T> *treeNode) {
-        //        auto newRootNode = treeNode->rchild;
-        //        auto oldRootNode = treeNode;
-        //
-        //        newRootNode->lchild = oldRootNode;
-        //        oldRootNode->rchild = oldRootNode->rchild->lchild;
-        cout<<"L"<<endl;
-    }
-
-    void rotationR(AVLBinaryTreeNode<T> *treeNode) {
-        //        auto oldRootNode = treeNode;
-        //
-        //        treeNode->data = treeNode->lchild->data;
-        //        treeNode->lchild = treeNode->lchild->lchild;
-        //        treeNode->rchild = treeNode->lchild->rchild;
-        //        treeNode->parents = treeNode->lchild->parents;
-        //        treeNode->repeat = treeNode->lchild->repeat;
-        //
-        //
-        //
-        //        newRootNode->rchild = oldRootNode;
-        //        oldRootNode->lchild = oldRootNode->lchild->rchild;
-        cout<<"R"<<endl;
-    }
-
     
 private:
     int _getHeight(AVLBinaryTreeNode<T> *treeNode) {
@@ -84,41 +58,20 @@ private:
         int right = 0;
         
         treeNode->lchild == nullptr ? left = 0 : left = treeNode->lchild->getHeight();
-        treeNode->rchild == nullptr ? left = 0 : right = treeNode->rchild->getHeight();
+        treeNode->rchild == nullptr ? right = 0 : right = treeNode->rchild->getHeight();
         
         return left - right;
     }
     
-    void _makeBalance(AVLBinaryTreeNode<T> *treeNode) {
-        //判断旋转类型
-        int treeNodeBf = treeNode->getBalanceFactor();
-        if (treeNodeBf > 0) {
-            //L-
-            int lchildNodeBf = treeNode->lchild->getBalanceFactor();
-            if (lchildNodeBf > 0) {
-                //L-L
-                rotationR(treeNode);
-            } else {
-                //L-R
-                rotationL(treeNode->lchild);
-                rotationR(treeNode);
-            }
-        } else {
-            //R-
-            int rchildNodeBf = treeNode->rchild->getBalanceFactor();
-            if (rchildNodeBf < 0) {
-                //R-R
-                rotationL(treeNode);
-            } else {
-                //R-L
-                rotationR(treeNode->rchild);
-                rotationL(treeNode->lchild);
-            }
+    AVLBinaryTreeNode<T> *_getUnbalanceNode(AVLBinaryTreeNode<T> *node) {
+        if (node == nullptr) {
+            return nullptr;
         }
-    }
-    
-    AVLBinaryTreeNode<T> *_getTroubleNode(AVLBinaryTreeNode<T> *node) {
-        
+        auto bf = node->getBalanceFactor();
+        if (abs(bf) > 1) {
+            return node;
+        }
+        return _getUnbalanceNode(node->parents);
     }
 };
 
@@ -134,9 +87,76 @@ struct AVLBinaryTree {
         return this->root->getBalanceFactor();
     }
     
-    void makeBalance() {
-        return this->root->makeBalance();
+    void makeBalance(AVLBinaryTreeNode<T> *node) {
+        //判断旋转类型
+        int nodeBf = node->getBalanceFactor();
+        if (nodeBf > 0) {
+            //L-
+            int lchildNodeBf = node->lchild->getBalanceFactor();
+            if (lchildNodeBf > 0) {
+                //L-L
+                rotationL(node);
+            } else {
+                //L-R
+                rotationR(node->lchild);
+                rotationL(node);
+            }
+        } else {
+            //R-
+            int rchildNodeBf = node->rchild->getBalanceFactor();
+            if (rchildNodeBf < 0) {
+                //R-R
+                rotationR(node);
+            } else {
+                //R-L
+                rotationL(node->rchild);
+                rotationR(node);
+            }
+        }
     }
+    
+    void rotationL(AVLBinaryTreeNode<T> *node) {
+        if (node->parents == nullptr) {
+            //node is root
+            this->root = node->lchild;
+            node->lchild = node->lchild->rchild;
+            this->root->rchild = node;
+            this->root->parents = nullptr;
+            node->parents = this->root;
+        } else {
+            if (node->parents->lchild == node) {
+                node->parents->lchild = node->lchild;
+            } else {
+                node->parents->rchild = node->lchild;
+            }
+            node->lchild->parents = node->parents;
+            node->lchild->rchild = node;
+            node->parents = node->lchild;
+            node->lchild = nullptr;
+        }
+    }
+    
+    void rotationR(AVLBinaryTreeNode<T> *node) {
+        if (node->parents == nullptr) {
+            //node is root
+            this->root = node->rchild;
+            node->rchild = node->rchild->lchild;
+            this->root->lchild = node;
+            this->root->parents = nullptr;
+            node->parents = this->root;
+        } else {
+            if (node->parents->lchild == node) {
+                node->parents->lchild = node->rchild;
+            } else {
+                node->parents->rchild = node->rchild;
+            }
+            node->rchild->parents = node->parents;
+            node->rchild->lchild = node;
+            node->parents = node->rchild;
+            node->rchild = nullptr;
+        }
+    }
+    
     void insertData(T data) {
         this->_insertData(data, this->root);
     }
@@ -159,23 +179,23 @@ private:
                     newNode->parents = treeNode;
                     treeNode->lchild = newNode;
                     
-                    auto bf = this->getBalanceFactor();
-                    if (abs(bf) > 1) {
-                        this->makeBalance();
+                    auto unbalanceNode = newNode->getUnbalanceNode();
+                    if (unbalanceNode != nullptr) {
+                        this->makeBalance(unbalanceNode);
                     }
                 } else {
                     _insertData(data, treeNode->lchild);
                 }
             } else if (treeNode->data < data) {
                 if (treeNode->rchild == nullptr) {
-                    auto node = new AVLBinaryTreeNode<T>;
-                    node->data = data;
-                    node->parents = treeNode;
-                    treeNode->rchild = node;
+                    auto newNode = new AVLBinaryTreeNode<T>;
+                    newNode->data = data;
+                    newNode->parents = treeNode;
+                    treeNode->rchild = newNode;
                     
-                    auto bf = this->getBalanceFactor();
-                    if (abs(bf) > 1) {
-                        this->makeBalance();
+                    auto unbalanceNode = newNode->getUnbalanceNode();
+                    if (unbalanceNode != nullptr) {
+                        this->makeBalance(unbalanceNode);
                     }
                 } else {
                     _insertData(data, treeNode->rchild);
