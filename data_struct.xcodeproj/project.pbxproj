@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4FB5A3181F98E52400AE1A64 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5A3161F98E52400AE1A64 /* main.cpp */; };
 		4FEE05491F8CF32300B8B6D6 /* SingleList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE05481F8CF32300B8B6D6 /* SingleList.cpp */; };
-		4FEE05561F8E6B2F00B8B6D6 /* BinaryTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE05551F8E6B2F00B8B6D6 /* BinaryTree.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,10 +33,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4FB5A3131F989A3100AE1A64 /* AVLBinaryTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AVLBinaryTree.hpp; sourceTree = "<group>"; };
+		4FB5A3161F98E52400AE1A64 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4FEE05451F8CF32300B8B6D6 /* SingleList */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SingleList; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FEE05481F8CF32300B8B6D6 /* SingleList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SingleList.cpp; sourceTree = "<group>"; };
 		4FEE05531F8E6B2F00B8B6D6 /* BinaryTree */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BinaryTree; sourceTree = BUILT_PRODUCTS_DIR; };
-		4FEE05551F8E6B2F00B8B6D6 /* BinaryTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryTree.cpp; sourceTree = "<group>"; };
+		4FEE05551F8E6B2F00B8B6D6 /* BinaryTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BinaryTree.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +88,9 @@
 		4FEE05541F8E6B2F00B8B6D6 /* BinaryTree */ = {
 			isa = PBXGroup;
 			children = (
-				4FEE05551F8E6B2F00B8B6D6 /* BinaryTree.cpp */,
+				4FEE05551F8E6B2F00B8B6D6 /* BinaryTree.hpp */,
+				4FB5A3131F989A3100AE1A64 /* AVLBinaryTree.hpp */,
+				4FB5A3161F98E52400AE1A64 /* main.cpp */,
 			);
 			path = BinaryTree;
 			sourceTree = "<group>";
@@ -178,7 +182,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FEE05561F8E6B2F00B8B6D6 /* BinaryTree.cpp in Sources */,
+				4FB5A3181F98E52400AE1A64 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
