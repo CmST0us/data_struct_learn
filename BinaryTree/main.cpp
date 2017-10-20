@@ -13,7 +13,11 @@ void test_BinaryTree() {
     BinaryTree<int> tree;
     tree<<15<<6<<11<<7<<8<<9<<10<<17<<18;
     
-    
+    cout<<"层序:";
+    tree.enumLayerUsingBlock([&](BinaryTreeNode<int> *before, BinaryTreeNode<int>* now, int index, bool &stop){
+        cout<<"["<<index<<"]:"<<now->data<<"_"<<before->data<<", ";
+    });
+    cout<<endl;
     
     tree.removeData(15);
     cout<<"remove15中序:";
@@ -66,11 +70,17 @@ void test_AVLBinaryTree() {
     AVLBinaryTree<int> tree;
     tree<<15<<6<<11<<7<<8<<9<<10<<17<<18;
     
-    tree.removeData(8);
+//    tree.removeData(8);
+
+//    tree.removeData(15);
     
-    tree.removeData(15);
+//    tree.removeData(17);
     
-    tree.removeData(17);
+    cout<<"层序:";
+    tree.enumLayerUsingBlock([](AVLBinaryTreeNode<int> *node, int index, bool &stop){
+        cout<<node->data<<"["<<index<<"], ";
+    });
+    cout<<endl;
     
     cout<<"先序:";
     tree.enumDLRUsingBlock([](AVLBinaryTreeNode<int> *node, bool &stop){
@@ -82,6 +92,13 @@ void test_AVLBinaryTree() {
     tree.enumLDRUsingBlock([](AVLBinaryTreeNode<int> *node, bool &stop){
         cout<<node->data<<",";
     });
+    cout<<endl;
+    
+    cout<<"后序:";
+    tree.enumLRDUsingBlock([](AVLBinaryTreeNode<int> *node, bool &stop){
+        cout<<node->data<<",";
+    });
+    
     
     
     cout<<endl;
@@ -89,7 +106,7 @@ void test_AVLBinaryTree() {
 }
 int main(int argc, char *argv[]) {
     test_BinaryTree();
-    test_AVLBinaryTree();
+//    test_AVLBinaryTree();
     
     return 0;
 }

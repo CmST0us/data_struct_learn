@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
-
+#include <deque>
 using namespace std;
 template <class T>
 struct AVLBinaryTreeNode {
@@ -42,28 +42,36 @@ struct AVLBinaryTreeNode {
         return this->_getUnbalanceNode(this);
     }
     
-    void enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *t, bool &stop)> func) {
+    void enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *, bool &)> func) {
         this->_enumDLRUsingBlock(func, this);
     }
     
-    void enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *b, AVLBinaryTreeNode<T>* t, bool &stop)> func) {
+    void enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T>* , bool &)> func) {
         this->_enumDLRUsingBlock(func, this);
     }
     
-    void enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *t, bool &stop)> func) {
+    void enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *, bool &)> func) {
         this->_enumLDRUsingBlock(func, this);
     }
     
-    void enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *b, AVLBinaryTreeNode<T>* t, bool &stop)> func) {
+    void enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T>* , bool &)> func) {
         this->_enumLDRUsingBlock(func, this);
     }
     
-    void enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *t, bool &stop)> func) {
+    void enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *, bool &)> func) {
         this->_enumLRDUsingBlock(func, this);
     }
     
-    void enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *b, AVLBinaryTreeNode<T>* t, bool &stop)> func) {
+    void enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T>* , bool &)> func) {
         this->_enumLRDUsingBlock(func, this);
+    }
+    
+    void enumLayerUsingBlock(function<void(AVLBinaryTreeNode<T> *, int, bool &)> func) {
+        this->_enumLayerUsingBlock(func, this);
+    }
+    
+    void enumLayerUsingBlock(function<void (AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T> *, int, bool&)> func) {
+        this->_enumLayerUsingBlock(func, this);
     }
     
 private:
@@ -98,7 +106,7 @@ private:
         return _getUnbalanceNode(node->parents);
     }
     //先序
-    void _enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *t, bool &stop)> func,
+    void _enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *, bool &)> func,
                             AVLBinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr) {
         bool s;
@@ -115,7 +123,7 @@ private:
     }
     
     //中序
-    void _enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *t, bool &stop)> func,
+    void _enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *, bool &)> func,
                             AVLBinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr) {
         bool s;
@@ -131,7 +139,7 @@ private:
     }
     
     //后序
-    void _enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *t, bool &stop)> func,
+    void _enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *, bool &)> func,
                             AVLBinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr) {
         bool s;
@@ -146,8 +154,31 @@ private:
         }
     }
     
+    //层序
+    void _enumLayerUsingBlock(function<void(AVLBinaryTreeNode<T> *, int, bool &)> func,
+                              AVLBinaryTreeNode<T> *node = nullptr,
+                              bool *stop = nullptr) {
+        bool s;
+        if (stop == nullptr) stop = &s; else s = *stop;
+
+        deque<AVLBinaryTreeNode<T>*> nodeQueue;
+        nodeQueue.push_back(node);
+        int i = 0;
+        while(nodeQueue.size()) {
+            auto pNode = nodeQueue.front();
+            nodeQueue.pop_front();
+            
+            func(pNode, i++, *stop);
+            if (!stop) {
+                return;
+            }
+            
+            if (pNode->lchild != nullptr) nodeQueue.push_back(pNode->lchild);
+            if (pNode->rchild != nullptr) nodeQueue.push_back(pNode->rchild);
+        }
+    }
     //带前驱元素先序遍历
-    void _enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *b, AVLBinaryTreeNode<T>* t, bool &stop)> func,
+    void _enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T>* , bool &)> func,
                             AVLBinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr,
                             AVLBinaryTreeNode<T> **beforeTree = nullptr) {
@@ -167,7 +198,7 @@ private:
     }
     
     //带前驱元素的中序遍历
-    void _enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *b, AVLBinaryTreeNode<T>* t, bool &stop)> func,
+    void _enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T>* , bool &)> func,
                             AVLBinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr,
                             AVLBinaryTreeNode<T> **beforeTree = nullptr) {
@@ -189,7 +220,7 @@ private:
     }
     
     //带前驱元素的后序遍历
-    void _enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *b, AVLBinaryTreeNode<T>* t, bool &stop)> func,
+    void _enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T>* , bool &)> func,
                             AVLBinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr,
                             AVLBinaryTreeNode<T> **beforeTree = nullptr) {
@@ -205,6 +236,34 @@ private:
             func(*beforeTree, node, *stop);
             *beforeTree = node;
             if (*stop) return;
+        }
+    }
+    //带前驱元素的层序遍历
+    void _enumLayerUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T> *, int, bool &)> func,
+                              AVLBinaryTreeNode<T> *node = nullptr,
+                              bool *stop = nullptr,
+                              AVLBinaryTreeNode<T> **beforeTree = nullptr) {
+        AVLBinaryTreeNode<T> *before;
+        bool s;
+        
+        if (stop == nullptr) stop = &s; else s = *stop;
+        if (beforeTree == nullptr) beforeTree = &before;
+        
+        deque<AVLBinaryTreeNode<T>*> nodeQueue;
+        nodeQueue.push_back(node);
+        int i = 0;
+        while(nodeQueue.size()) {
+            auto pNode = nodeQueue.front();
+            nodeQueue.pop_front();
+            
+            func(*beforeTree, pNode, i++, *stop);
+            *beforeTree = pNode;
+            if (!stop) {
+                return;
+            }
+            
+            if (pNode->lchild != nullptr) nodeQueue.push_back(pNode->lchild);
+            if (pNode->rchild != nullptr) nodeQueue.push_back(pNode->rchild);
         }
     }
 };
@@ -296,28 +355,36 @@ struct AVLBinaryTree {
         }
     }
     
-    void enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *t, bool &stop)> func) {
+    void enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *, bool &)> func) {
         this->root->enumDLRUsingBlock(func);
     }
     
-    void enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *b, AVLBinaryTreeNode<T>* t, bool &stop)> func) {
+    void enumDLRUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T>* , bool &)> func) {
         this->root->enumDLRUsingBlock(func);
     }
     
-    void enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *t, bool &stop)> func) {
+    void enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *, bool &)> func) {
         this->root->enumLDRUsingBlock(func);
     }
     
-    void enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *b, AVLBinaryTreeNode<T>* t, bool &stop)> func) {
+    void enumLDRUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T>* , bool &)> func) {
         this->root->enumLDRUsingBlock(func);
     }
     
-    void enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *t, bool &stop)> func) {
+    void enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *, bool &)> func) {
         this->root->enumLRDUsingBlock(func);
     }
     
-    void enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *b, AVLBinaryTreeNode<T>* t, bool &stop)> func) {
+    void enumLRDUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T>* , bool &)> func) {
         this->root->enumLRDUsingBlock(func);
+    }
+    
+    void enumLayerUsingBlock(function<void(AVLBinaryTreeNode<T> *, int, bool &)> func) {
+        this->root->enumLayerUsingBlock(func);
+    }
+    
+    void enumLayerUsingBlock(function<void(AVLBinaryTreeNode<T> *, AVLBinaryTreeNode<T> *, int, bool &)> func) {
+        this->root->enumLayerUsingBlock(func);
     }
     
     void insertData(T data) {
