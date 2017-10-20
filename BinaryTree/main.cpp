@@ -11,12 +11,12 @@
 
 void test_BinaryTree() {
     BinaryTree<int> tree;
-    tree<<5<<6<<10<<21<<8<<9<<7<<14<<6<<3<<2<<4;
+    tree<<15<<6<<11<<7<<8<<9<<10<<17<<18;
     
     
     
-    tree.removeData(5);
-    cout<<"remove5中序:";
+    tree.removeData(15);
+    cout<<"remove15中序:";
     tree.enumLDRUsingBlock([](BinaryTreeNode<int> *t, bool &stop){
         cout<<t->data<<", ";
     });
@@ -66,10 +66,29 @@ void test_AVLBinaryTree() {
     AVLBinaryTree<int> tree;
     tree<<15<<6<<11<<7<<8<<9<<10<<17<<18;
     
+    tree.removeData(8);
+    
+    tree.removeData(15);
+    
+    tree.removeData(17);
+    
+    cout<<"先序:";
+    tree.enumDLRUsingBlock([](AVLBinaryTreeNode<int> *node, bool &stop){
+        cout<<node->data<<",";
+    });
+    cout<<endl;
+    
+    cout<<"中序:";
+    tree.enumLDRUsingBlock([](AVLBinaryTreeNode<int> *node, bool &stop){
+        cout<<node->data<<",";
+    });
+    
+    
+    cout<<endl;
     
 }
 int main(int argc, char *argv[]) {
-//    test_BinaryTree();
+    test_BinaryTree();
     test_AVLBinaryTree();
     
     return 0;

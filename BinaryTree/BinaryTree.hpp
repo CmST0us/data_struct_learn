@@ -53,117 +53,111 @@ struct BinaryTreeNode {
 private:
     //先序
     void _enumDLRUsingBlock(function<void(BinaryTreeNode<T> *t, bool &stop)> func,
-                            BinaryTreeNode<T> *treeNode = nullptr,
+                            BinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr) {
-        BinaryTreeNode<T> *tree = treeNode;
         bool s;
         
         if (stop == nullptr) stop = &s; else s = *stop;
         
-        for (int i = 0; i < tree->repeat; ++i) {
-            func(tree, *stop);
+        for (int i = 0; i < node->repeat; ++i) {
+            func(node, *stop);
             if (*stop) return;
         }
         
-        if (tree->lchild != nullptr) _enumDLRUsingBlock(func, tree->lchild, stop);
-        if (tree->rchild != nullptr) _enumDLRUsingBlock(func, tree->rchild, stop);
+        if (node->lchild != nullptr) _enumDLRUsingBlock(func, node->lchild, stop);
+        if (node->rchild != nullptr) _enumDLRUsingBlock(func, node->rchild, stop);
     }
     
     //中序
     void _enumLDRUsingBlock(function<void(BinaryTreeNode<T> *t, bool &stop)> func,
-                            BinaryTreeNode<T> *treeNode = nullptr,
+                            BinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr) {
-        BinaryTreeNode<T> *tree = treeNode;
         bool s;
         
         if (stop == nullptr) stop = &s; else s = *stop;
         
-        if (tree->lchild != nullptr) _enumLDRUsingBlock(func, tree->lchild, stop);
-        for (int i = 0; i < tree->repeat; ++i) {
-            func(tree, *stop);
+        if (node->lchild != nullptr) _enumLDRUsingBlock(func, node->lchild, stop);
+        for (int i = 0; i < node->repeat; ++i) {
+            func(node, *stop);
             if (*stop) return;
         }
-        if (tree->rchild != nullptr) _enumLDRUsingBlock(func, tree->rchild, stop);
+        if (node->rchild != nullptr) _enumLDRUsingBlock(func, node->rchild, stop);
     }
     
     //后序
     void _enumLRDUsingBlock(function<void(BinaryTreeNode<T> *t, bool &stop)> func,
-                            BinaryTreeNode<T> *treeNode = nullptr,
+                            BinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr) {
-        BinaryTreeNode<T> *tree = treeNode;
         bool s;
         
         if (stop == nullptr) stop = &s; else s = *stop;
         
-        if (tree->lchild != nullptr) _enumLRDUsingBlock(func, tree->lchild, stop);
-        if (tree->rchild != nullptr) _enumLRDUsingBlock(func, tree->rchild, stop);
-        for (int i = 0; i < tree->repeat; ++i) {
-            func(tree, *stop);
+        if (node->lchild != nullptr) _enumLRDUsingBlock(func, node->lchild, stop);
+        if (node->rchild != nullptr) _enumLRDUsingBlock(func, node->rchild, stop);
+        for (int i = 0; i < node->repeat; ++i) {
+            func(node, *stop);
             if (*stop) return;
         }
     }
     
     //带前驱元素先序遍历
     void _enumDLRUsingBlock(function<void(BinaryTreeNode<T> *b, BinaryTreeNode<T>* t, bool &stop)> func,
-                            BinaryTreeNode<T> *treeNode = nullptr,
+                            BinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr,
                             BinaryTreeNode<T> **beforeTree = nullptr) {
-        BinaryTreeNode<T> *tree = treeNode;
         BinaryTreeNode<T> *before;
         bool s;
         
         if (stop == nullptr) stop = &s; else s = *stop;
         if (beforeTree == nullptr) beforeTree = &before;
         
-        for (int i = 0; i < tree->repeat; ++i) {
-            func(*beforeTree, tree, *stop);
-            *beforeTree = tree;
+        for (int i = 0; i < node->repeat; ++i) {
+            func(*beforeTree, node, *stop);
+            *beforeTree = node;
             if (*stop) return;
         }
-        if (tree->lchild != nullptr) _enumDLRUsingBlock(func, tree->lchild, stop, beforeTree);
-        if (tree->rchild != nullptr) _enumDLRUsingBlock(func, tree->rchild, stop, beforeTree);
+        if (node->lchild != nullptr) _enumDLRUsingBlock(func, node->lchild, stop, beforeTree);
+        if (node->rchild != nullptr) _enumDLRUsingBlock(func, node->rchild, stop, beforeTree);
     }
     
     //带前驱元素的中序遍历
     void _enumLDRUsingBlock(function<void(BinaryTreeNode<T> *b, BinaryTreeNode<T>* t, bool &stop)> func,
-                            BinaryTreeNode<T> *treeNode = nullptr,
+                            BinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr,
                             BinaryTreeNode<T> **beforeTree = nullptr) {
-        BinaryTreeNode<T> *tree = treeNode;
         BinaryTreeNode<T> *before;
         bool s;
         
         if (stop == nullptr) stop = &s; else s = *stop;
         if (beforeTree == nullptr) beforeTree = &before;
         
-        if (tree->lchild != nullptr) _enumLDRUsingBlock(func, tree->lchild, stop, beforeTree);
+        if (node->lchild != nullptr) _enumLDRUsingBlock(func, node->lchild, stop, beforeTree);
         
-        for (int i = 0; i < tree->repeat; ++i) {
-            func(*beforeTree, tree, *stop);
-            *beforeTree = tree;
+        for (int i = 0; i < node->repeat; ++i) {
+            func(*beforeTree, node, *stop);
+            *beforeTree = node;
             if (*stop) return;
         }
         
-        if (tree->rchild != nullptr) _enumLDRUsingBlock(func, tree->rchild, stop, beforeTree);
+        if (node->rchild != nullptr) _enumLDRUsingBlock(func, node->rchild, stop, beforeTree);
     }
     
     //带前驱元素的后序遍历
     void _enumLRDUsingBlock(function<void(BinaryTreeNode<T> *b, BinaryTreeNode<T>* t, bool &stop)> func,
-                            BinaryTreeNode<T> *treeNode = nullptr,
+                            BinaryTreeNode<T> *node = nullptr,
                             bool *stop = nullptr,
                             BinaryTreeNode<T> **beforeTree = nullptr) {
-        BinaryTreeNode<T> *tree = treeNode;
         BinaryTreeNode<T> *before;
         bool s;
         
         if (stop == nullptr) stop = &s; else s = *stop;
         if (beforeTree == nullptr) beforeTree = &before;
         
-        if (tree->lchild != nullptr) _enumLRDUsingBlock(func, tree->lchild, stop, beforeTree);
-        if (tree->rchild != nullptr) _enumLRDUsingBlock(func, tree->rchild, stop, beforeTree);
-        for (int i = 0; i < tree->repeat; ++i) {
-            func(*beforeTree, tree, *stop);
-            *beforeTree = tree;
+        if (node->lchild != nullptr) _enumLRDUsingBlock(func, node->lchild, stop, beforeTree);
+        if (node->rchild != nullptr) _enumLRDUsingBlock(func, node->rchild, stop, beforeTree);
+        for (int i = 0; i < node->repeat; ++i) {
+            func(*beforeTree, node, *stop);
+            *beforeTree = node;
             if (*stop) return;
         }
     }
@@ -194,87 +188,20 @@ struct BinaryTree {
     }
     
     void removeData(T data) {
-        this->_removeData(data ,this->root);
-    }
-    
-    void enumDLRUsingBlock(function<void(BinaryTreeNode<T> *t, bool &stop)> func) {
-        this->root->enumDLRUsingBlock(func);
-    }
-    
-    void enumDLRUsingBlock(function<void(BinaryTreeNode<T> *b, BinaryTreeNode<T>* t, bool &stop)> func) {
-        this->root->enumDLRUsingBlock(func);
-    }
-    
-    void enumLDRUsingBlock(function<void(BinaryTreeNode<T> *t, bool &stop)> func) {
-        this->root->enumLDRUsingBlock(func);
-    }
-    
-    void enumLDRUsingBlock(function<void(BinaryTreeNode<T> *b, BinaryTreeNode<T>* t, bool &stop)> func) {
-        this->root->enumLDRUsingBlock(func);
-    }
-    
-    void enumLRDUsingBlock(function<void(BinaryTreeNode<T> *t, bool &stop)> func) {
-        this->root->enumLRDUsingBlock(func);
-    }
-    
-    void enumLRDUsingBlock(function<void(BinaryTreeNode<T> *b, BinaryTreeNode<T>* t, bool &stop)> func) {
-        this->root->enumLRDUsingBlock(func);
-    }
-    
-    BinaryTree& operator<<(T data) {
-        this->_insertData(data, this->root);
-        return *this;
-    }
-    
-    
-private:
-    void _insertData(T data, BinaryTreeNode<T> *treeNode = nullptr) {
-        BinaryTreeNode<T> *tree = treeNode;
-        if (this->root == nullptr) {
-            auto newNode = new BinaryTreeNode<T>(data);
-            this->root = newNode;
-        } else {
-            if (tree->data > data) {
-                if (tree->lchild == nullptr) {
-                    auto newNode = new BinaryTreeNode<T>;
-                    newNode->data = data;
-                    newNode->parents = tree;
-                    tree->lchild = newNode;
-                } else {
-                    _insertData(data, tree->lchild);
-                }
-            } else if (tree->data < data) {
-                if (tree->rchild == nullptr) {
-                    auto node = new BinaryTreeNode<T>;
-                    node->data = data;
-                    node->parents = tree;
-                    tree->rchild = node;
-                } else {
-                    _insertData(data, tree->rchild);
-                }
-            } else {
-                tree->repeat++;
-            }
-        }
-    }
-    
-    
-    void _removeData(T data, BinaryTreeNode<T> *treeNode = nullptr) {
         if (data == this->root->data) {
             //删除根节点, 移动根
             this->enumLDRUsingBlock([&](BinaryTreeNode<T> *before, BinaryTreeNode<T> *now, bool &stop) {
                 if (now == this->root) {
                     //中序直接前驱节点替换根节点
-                    before->lchild = this->root->lchild;
                     before->rchild = this->root->rchild;
-                    before->parents->lchild == before ? before->parents->lchild = nullptr : before->parents->rchild = nullptr;
-                    before->parents = nullptr;
-                    
+                    this->root->rchild->parents = before;
                     this->root->lchild = nullptr;
                     this->root->rchild = nullptr;
-                    delete this->root;
                     
+                    delete this->root;
                     this->root = before;
+                    this->root->parents = nullptr;
+                    
                     stop = true;
                 }
             });
@@ -346,6 +273,66 @@ private:
                     stop = true;
                 }
             });
+        }
+    }
+    
+    void enumDLRUsingBlock(function<void(BinaryTreeNode<T> *t, bool &stop)> func) {
+        this->root->enumDLRUsingBlock(func);
+    }
+    
+    void enumDLRUsingBlock(function<void(BinaryTreeNode<T> *b, BinaryTreeNode<T>* t, bool &stop)> func) {
+        this->root->enumDLRUsingBlock(func);
+    }
+    
+    void enumLDRUsingBlock(function<void(BinaryTreeNode<T> *t, bool &stop)> func) {
+        this->root->enumLDRUsingBlock(func);
+    }
+    
+    void enumLDRUsingBlock(function<void(BinaryTreeNode<T> *b, BinaryTreeNode<T>* t, bool &stop)> func) {
+        this->root->enumLDRUsingBlock(func);
+    }
+    
+    void enumLRDUsingBlock(function<void(BinaryTreeNode<T> *t, bool &stop)> func) {
+        this->root->enumLRDUsingBlock(func);
+    }
+    
+    void enumLRDUsingBlock(function<void(BinaryTreeNode<T> *b, BinaryTreeNode<T>* t, bool &stop)> func) {
+        this->root->enumLRDUsingBlock(func);
+    }
+    
+    BinaryTree& operator<<(T data) {
+        this->_insertData(data, this->root);
+        return *this;
+    }
+    
+    
+private:
+    void _insertData(T data, BinaryTreeNode<T> *node = nullptr) {
+        if (this->root == nullptr) {
+            auto newNode = new BinaryTreeNode<T>(data);
+            this->root = newNode;
+        } else {
+            if (node->data > data) {
+                if (node->lchild == nullptr) {
+                    auto newNode = new BinaryTreeNode<T>;
+                    newNode->data = data;
+                    newNode->parents = node;
+                    node->lchild = newNode;
+                } else {
+                    _insertData(data, node->lchild);
+                }
+            } else if (node->data < data) {
+                if (node->rchild == nullptr) {
+                    auto newNode = new BinaryTreeNode<T>;
+                    newNode->data = data;
+                    newNode->parents = node;
+                    node->rchild = newNode;
+                } else {
+                    _insertData(data, node->rchild);
+                }
+            } else {
+                node->repeat++;
+            }
         }
     }
 };
